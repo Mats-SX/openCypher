@@ -1,4 +1,5 @@
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+:icons: font
 
 = The Cypher Technology Compliance Kit (TCK)
 
