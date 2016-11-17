@@ -1,0 +1,51 @@
+= Case Folding
+
+Make Neo4j textual indexes based on normalized strings.
+
+==== Function
+
+* `normalize(input :: STRING?) :: STRING?`
+** Takes a string as input and outputs an equivalent string, which is binary equal to strings that are different but equivalent to the input string.
+** Example: consider two strings `s1` and `s2`, which are equivalent, but binary different from each other.
+   The strings `normalize(s1)` and `normalize(s2)` would be _equal_.
+** Unicode normalization comes in four variants, which are combinations of using and not using the following two techniques:
+*** Strict
+*** Case folding
+** We could allow all four variants by the use of arguments to the `normalize()` function, with default values.
+
+==== Indexes
+
+Make all textual indexes normalize its input before writing it to the index.
+Similarly, all index lookups should normalize its argument string before supplying it to the underlying index.
+
+==== Case mapping
+
+Addition of a simple function `toTitle()`, for completeness of support of the Unicode standard.
+
+* `toTitle(input :: STRING?) :: STRING?`
+** Takes a locale-specific string as input and outputs a locale-specific string with all characters in title case, as given by the locale.
+
+
+Add second argument to all case mapping functions, to add the ability to specify locale.
+This argument will have a default value of the current locale.
+The case mapping functions are:
+
+* `toUpper()`
+* `toLower()`
+* `toTitle()`
+
+The second argument could be a string representing the locale, ie `en`, `se` etc, as appropriate.
+
+- Q: Does it have to be full locale `en_US`, `en_GB`, `sv_SE` etc?
+- TODO: Read up on locale identification through strings.
+
+==== Details
+
+* If the input is `null`, the output should be `null`.
+* If the input is a non-string, an error should be raised.
+
+=== Resources
+
+The link:http://site.icu-project.org/home/why-use-icu4j[ICU4j library] provides the required functionality. It is managed by a very appropriate source.
+
+Lucene also provides functionality, and is an alternative that already exists on our classpath.
