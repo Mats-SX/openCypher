@@ -1,0 +1,41 @@
+= Undirected pattern matching
+
+Pattern matching in Cypher may be phrased as follows:
+
+.Pattern matching:
+_Find me all unique paths that satisfy all predicates._
+
+.A simple pattern.
+====
+The pattern `()-\->()` may be read as: find me all unique paths that start at a node with an outgoing relationship, and ends at the target node of that relationship.
+====
+
+It is possible to omit the direction of relationships in patterns.
+In this case, any direction of the actual relationship is a valid match for the pattern.
+
+.A simple, undirected pattern.
+====
+The pattern `()--()` may be understood as `()-\->() OR ()\<--()`.
+====
+
+This has the effect that any relationship that goes between distinct nodes will be considered twice.
+If the set of predicates for the nodes are true for both the source and the target node of a relationship, it will be matched twice.
+When a relationship starts and ends at the same node, however, it will only be matched once.
+
+The reason for this is because a path of length 1 that starts and ends at the same node (a self-relationship path) does not take the direction of the (self-)relationship into account.
+
+In general,
+
+
+
+
+//.Example 1:
+//Consider the graph `G1` of one node and one relationship (to itself), and the graph `G2` of two nodes and one relationship between them.
+//The following query will return results as shown:
+//
+//.Title
+//[frame="topbot",cols="2l,1a,1m", options="header,footer"]
+//|============================================================
+//|Query                            |`G1`      |`G2`
+//|MATCH p = ()-[r]-() RETURN p  | `(:A)-\->(:A)`        | `(a)-\->(b)`
+//|============================================================
